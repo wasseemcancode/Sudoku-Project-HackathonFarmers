@@ -22,8 +22,19 @@ class SudokuGenerator:
 	Return:
 	None
     '''
-    def __init__(self, row_length, removed_cells):
-        pass
+    def __init__(self: object, row_length: int, removed_cells: int) -> None:
+        self.row_length = row_length
+        self.removed_cells = removed_cells
+
+        # generating a full board
+        self.board = [[random.randint(0, 9) for j in range(row_length)] for _ in range(self.row_length)]
+        
+        # removing cells
+        for _ in range(removed_cells):
+            # indicies 0-8
+            i, j = [random.randint(0, row_length - 1) for something in range(2)]
+            self.board[i][j] = None
+
 
     '''
 	Returns a 2D python list of numbers which represents the board
@@ -31,8 +42,8 @@ class SudokuGenerator:
 	Parameters: None
 	Return: list[list]
     '''
-    def get_board(self):
-        pass
+    def get_board(self: object) -> list[list]:
+        return self.board
 
     '''
 	Displays the board to the console
@@ -41,8 +52,11 @@ class SudokuGenerator:
 	Parameters: None
 	Return: None
     '''
-    def print_board(self):
-        pass
+    def print_board(self: object) -> None:
+        print()
+        for row in self.board:
+            print("   ".join(str(num) if num is not None else '.' for num in row))
+            print()
 
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -54,7 +68,7 @@ class SudokuGenerator:
 	
 	Return: boolean
     '''
-    def valid_in_row(self, row, num):
+    def valid_in_row(self: object, row: int, num: int) -> bool:
         pass
 
     '''
@@ -67,7 +81,7 @@ class SudokuGenerator:
 	
 	Return: boolean
     '''
-    def valid_in_col(self, col, num):
+    def valid_in_col(self: object, col: int, num: int) -> bool:
         pass
 
     '''
@@ -82,7 +96,7 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
-    def valid_in_box(self, row_start, col_start, num):
+    def valid_in_box(self: object, row_start: int, col_start: int, num: int) -> bool:
         pass
     
     '''
@@ -95,7 +109,7 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
-    def is_valid(self, row, col, num):
+    def is_valid(self: object, row: int, col: int, num: int) -> bool:
         pass
 
     '''
@@ -108,7 +122,7 @@ class SudokuGenerator:
 
 	Return: None
     '''
-    def fill_box(self, row_start, col_start):
+    def fill_box(self: object, row_start: int, col_start: int) -> None:
         pass
     
     '''
@@ -118,7 +132,7 @@ class SudokuGenerator:
 	Parameters: None
 	Return: None
     '''
-    def fill_diagonal(self):
+    def fill_diagonal(self: object):
         pass
 
     '''
@@ -133,7 +147,7 @@ class SudokuGenerator:
 	Return:
 	boolean (whether or not we could solve the board)
     '''
-    def fill_remaining(self, row, col):
+    def fill_remaining(self: object, row: int, col: int) -> bool:
         if (col >= self.row_length and row < self.row_length - 1):
             row += 1
             col = 0
@@ -168,7 +182,7 @@ class SudokuGenerator:
 	Parameters: None
 	Return: None
     '''
-    def fill_values(self):
+    def fill_values(self: object) -> None:
         self.fill_diagonal()
         self.fill_remaining(0, self.box_length)
 
@@ -184,7 +198,7 @@ class SudokuGenerator:
 	Parameters: None
 	Return: None
     '''
-    def remove_cells(self):
+    def remove_cells(self: object) -> None:
         pass
 
 '''
@@ -202,10 +216,19 @@ removed is the number of cells to clear (set to 0)
 
 Return: list[list] (a 2D Python list to represent the board)
 '''
-def generate_sudoku(size, removed):
+def generate_sudoku(size: int, removed: int) -> list[list]:
     sudoku = SudokuGenerator(size, removed)
     sudoku.fill_values()
     board = sudoku.get_board()
     sudoku.remove_cells()
     board = sudoku.get_board()
     return board
+
+
+
+# for dev purposes::
+if __name__ == '__main__':
+    sudoku = SudokuGenerator(9, 50)
+    print(sudoku.get_board())
+    sudoku.print_board()
+
