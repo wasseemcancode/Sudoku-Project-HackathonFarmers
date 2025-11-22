@@ -69,7 +69,12 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self: object, row: int, num: int) -> bool:
-        pass
+        
+        if num in self.board[row]:
+
+            return False
+        
+        return True
 
     '''
 	Determines if num is contained in the specified column (vertical) of the board
@@ -82,7 +87,13 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self: object, col: int, num: int) -> bool:
-        pass
+        
+
+        if num in self.board[col]:
+
+            return False
+        
+        return True
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -97,7 +108,16 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self: object, row_start: int, col_start: int, num: int) -> bool:
-        pass
+        
+        for i in range(row_start, row_start + 3):
+
+            for j in range(col_start, col_start + 3):
+
+                if num in self.board[i][j]:
+
+                    return False
+                
+        return True
     
     '''
     Determines if it is valid to enter num at (row, col) in the board
@@ -110,7 +130,27 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def is_valid(self: object, row: int, col: int, num: int) -> bool:
-        pass
+
+        if num in self.board[row]:
+            return False
+        
+        for i in range(9):
+            if self.board[i][col] == num:
+                return False
+          
+        for j in range(3):
+            
+            for k in range(3):
+
+                if self.board[(row - row % 3) + j][(col - col % 3)+ k] == num:
+                        
+                        return False
+        
+        
+        return True 
+
+     
+
 
     '''
     Fills the specified 3x3 box with values
@@ -123,7 +163,8 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self: object, row_start: int, col_start: int) -> None:
-        pass
+        
+       pass
     
     '''
     Fills the three boxes along the main diagonal of the board
