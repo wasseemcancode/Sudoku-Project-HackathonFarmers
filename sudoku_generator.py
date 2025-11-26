@@ -27,13 +27,21 @@ class SudokuGenerator:
         self.removed_cells = removed_cells
 
         # generating a full board
-        self.board = [[random.randint(0, 9) for j in range(row_length)] for _ in range(self.row_length)]
-        
+        self.board = [[0 for j in range(row_length)] for i in range(self.row_length)]
+        self.box_length = int(math.sqrt(row_length))
         # removing cells
+
+
         for _ in range(removed_cells):
             # indicies 0-8
+
+        
+            
             i, j = [random.randint(0, row_length - 1) for something in range(2)]
             self.board[i][j] = None
+
+
+        
 
 
     '''
@@ -88,10 +96,12 @@ class SudokuGenerator:
     '''
     def valid_in_col(self: object, col: int, num: int) -> bool:
         
+        for i in range(self.row_length):
 
-        if num in self.board[col]:
 
-            return False
+            if self.board[i][col] == num:
+
+                return False
         
         return True
 
@@ -113,7 +123,7 @@ class SudokuGenerator:
 
             for j in range(col_start, col_start + 3):
 
-                if num in self.board[i][j]:
+                if num == self.board[i][j]:
 
                     return False
                 
@@ -164,7 +174,24 @@ class SudokuGenerator:
     '''
     def fill_box(self: object, row_start: int, col_start: int) -> None:
         
-       pass
+       for i in range(row_start, row_start + 3):
+
+            for j in range(col_start, col_start + 3):
+
+                availableNumbers = []
+
+                for num in range(1, 10):
+
+                    if self.valid_in_box(row_start, col_start, num):
+                        
+                        availableNumbers.append(num)
+
+
+                num = random.choice(availableNumbers)
+                self.board[i][j] = num
+
+
+    
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -273,3 +300,6 @@ if __name__ == '__main__':
     print(sudoku.get_board())
     sudoku.print_board()
 
+    
+
+   
