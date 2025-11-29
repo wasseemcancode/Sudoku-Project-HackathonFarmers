@@ -29,20 +29,6 @@ class SudokuGenerator:
         # generating a full board
         self.board = [[0 for j in range(row_length)] for i in range(self.row_length)]
         self.box_length = int(math.sqrt(row_length))
-        # removing cells
-
-
-        ''' i think this is bad
-        for _ in range(removed_cells):
-            # indicies 0-8
-
-        
-            
-            i, j = [random.randint(0, row_length - 1) for something in range(2)]
-            self.board[i][j] = None
-        '''
-
-        
 
 
     '''
@@ -248,7 +234,10 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self: object) -> None:
-        pass
+        for _ in range(self.removed_cells):
+            # indicies 0-8
+            i, j = [random.randint(0, self.row_length - 1) for i in range(2)]
+            self.board[i][j] = 0
 
 '''
 DO NOT CHANGE
@@ -279,7 +268,9 @@ def generate_sudoku(size: int, removed: int) -> list[list]:
 if __name__ == '__main__':
     sudoku = SudokuGenerator(9, 50)
     sudoku.fill_values()
-    print(sudoku.get_board())
+    board = sudoku.get_board()
+    sudoku.remove_cells()
+    board = sudoku.get_board()
     sudoku.print_board()
 
     
