@@ -5,6 +5,7 @@ from sudoku_generator import SudokuGenerator
 
 
 
+
 class Cell:
 
     def __init__(self, value, row, col, screen):
@@ -66,6 +67,10 @@ class Board:
 
         self.cells = []
 
+        self.selected_row = None
+
+        self.selected_col = None
+
         removed_squares = 0 
 
         if difficulty == "easy":
@@ -85,7 +90,7 @@ class Board:
         sudoku.fill_values()
 
 
-        #NOTE: this is for including cell class functionality 
+   
 
 
         sudoku.remove_cells()
@@ -108,14 +113,16 @@ class Board:
 
 
         def select(self, row, col):
+            
+            self.select_row = row
 
-            pass
+            self.select_col = col
+
+
+
+            
 
         def click(self, x, y):
-
-            pass
-
-        def clear(self):
 
             pass
 
@@ -130,7 +137,11 @@ class Board:
 
         def place_number(self, value):
 
-            pass
+            if self.selected_row is not None and self.selected_col is not None:
+
+                my_Board[self.selected_row][self.selected_col] = value
+
+                
 
         def reset_to_original(self):
 
