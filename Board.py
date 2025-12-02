@@ -1,4 +1,5 @@
 import pygame
+import sys
 import random 
 from sudoku_generator import * 
 from Cell import * 
@@ -59,10 +60,53 @@ class Board:
                 self.cells[row][col] = Cell(cell_value, row, col, screen)
 
 
-        def draw(self):
+        def draw():
+            pygame.init()
+            size = 600
+            height = 700
+            screen = pygame.display.set_mode((size, height))
+            pygame.display.set_caption("Sudoku UI")
 
-            pass
+            grid_size = 9
+            cell_size = size // grid_size
 
+            button_font = pygame.font.SysFont(None, 36)
+
+            def draw_button(text, x, y, w, h):
+                rect = pygame.Rect(x, y, w, h)
+                pygame.draw.rect(screen, (200, 200, 200), rect)
+                pygame.draw.rect(screen, (0, 0, 0), rect, 2)
+                label = button_font.render(text, True, (0, 0, 0))
+                label_rect = label.get_rect(center=rect.center)
+                screen.blit(label, label_rect)
+
+            running = True
+            while running:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+
+                screen.fill((255, 255, 255))
+
+                for i in range(grid_size + 1):
+                    thickness = 1
+                    if i % 3 == 0:
+                        thickness = 4
+                    pygame.draw.line(screen, (0, 0, 0), (0, i * cell_size), (size, i * cell_size), thickness)
+                    pygame.draw.line(screen, (0, 0, 0), (i * cell_size, 0), (i * cell_size, size), thickness)
+
+                btn_y = size + 40
+                btn_w = 150
+                btn_h = 50
+
+                draw_button("Reset", 25, btn_y, btn_w, btn_h)
+                draw_button("Restart", 225, btn_y, btn_w, btn_h)
+                draw_button("Exit", 425, btn_y, btn_w, btn_h)
+
+                pygame.display.flip()
+
+            pygame.quit()
+            sys.exit()
 
         def select(self, row, col):
             
