@@ -64,7 +64,7 @@ def main():
                             board.reset_to_original()
 
                         elif restartButton.collidepoint(x, y):
-                            board = Board(9, 9, screen, difficulty)
+                            gameState = 'menu'
                             statusMessage = ''
 
                         elif checkButton.collidepoint(x, y):
