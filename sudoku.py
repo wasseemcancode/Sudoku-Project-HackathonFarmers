@@ -1,46 +1,89 @@
-
 import pygame
 import sys
 from sudoku_generator import * 
 from Board import Board
 
 def main():
-        # Initializes game
+        
         pygame.init()
 
         screen = pygame.display.set_mode((600, 700))
-        pygame.display.set_caption("Sudoku")
+        pygame.display.set_caption("Hackathon Farmer Sudoku")
 
-        button_font = pygame.font.Font(None, 40)
+        buttonFont = pygame.font.Font(None, 40)
 
-        difficulty = "easy"
-        board = Board(9, 9, screen, difficulty)
+        difficulty = None
+        board = None
+        gameState = 'menu'
+        statusMessage = ''
+        gameRunning = True
 
-        running = True
-        while running:
+        while gameRunning:
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    gameRunning = False
                     sys.exit()
-                else:
+
+                if gameState == 'menu':
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+
+                        x, y = event.pos
+                        easyButton = pygame.Rect(200, 220, 200, 60)
+                        mediumButton = pygame.Rect(200, 300, 200, 60)
+                        hardButton = pygame.Rect(200, 380, 200, 60)
+
+                        if easyButton.collidepoint(x, y):
+                            difficulty = 'easy'
+                            board = Board(9, 9, screen, difficulty)
+                            statusMessage = ''
+                            gameState = 'gaming'
+
+                        elif mediumButton.collidepoint(x, y):
+                            difficulty = 'medium'
+                            board = Board(9, 9, screen, difficulty)
+                            statusMessage = ''
+                            gameState = 'gaming'
+
+                        elif hardButton.collidepoint(x, y):
+                            difficulty = 'hard'
+                            board = Board(9, 9, screen, difficulty)
+                            statusMessage = ''
+                            gameState = 'gaming'
+
+                elif gameState == 'gaming':
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         x, y = event.pos
+                        resetButton = pygame.Rect(20, 620, 120, 60)
+                        restartButton = pygame.Rect(160, 620, 120, 60)
+                        checkButton = pygame.Rect(300, 620, 120, 60)
+                        exitButton = pygame.Rect(440, 620, 120, 60)
 
-                        if y < 600:
-                            clicked_cell = board.click(x, y)
-                            if clicked_cell:
-                                board.select(clicked_cell[0], clicked_cell[1])
+                        if resetButton.collidepoint(x, y):
+
+                            board.reset_to_original()
+
+                        elif restartButton.collidepoint(x, y):
+                            board = Board(9, 9, screen, difficulty)
+                            statusMessage = ''
+
+                        elif checkButton.collidepoint(x, y):
+                            try:
+                                if board.is_full():
+                                    statusMessage = 'Sweet Victory!'
+                                else:
+                                    statusMessage = 'Defeat!'
+                            except Exception:
+                                statusMessage = 'Error try again'
+
+                        elif exitButton.collidepoint(x, y):
+                            pygame.quit()
+                            sys.exit()
                         else:
-                            if 50 <= x <= 200 and 620 <= y <= 680:
-                                board.reset_to_original()
-
-                            elif 250 <= x <= 400 and 620 <= y <= 680:
-                                board = Board(9, 9, screen, difficulty)
-
-                            elif 450 <= x <= 600 and 620 <= y <= 680:
-                                pygame.quit()
-                                sys.exit()
-
+                            if y < 600:
+                                clicked_cell = board.click(x, y)
+                                if clicked_cell:
+                                    board.select(clicked_cell[0], clicked_cell[1])
                     if event.type == pygame.KEYDOWN:
                         if board.selected_row is not None and board.selected_col is not None:
                             if event.key == pygame.K_1:
@@ -61,51 +104,67 @@ def main():
                                 board.sketch(8)
                             if event.key == pygame.K_9:
                                 board.sketch(9)
-
-                    if event.type == pygame.K_RETURN:
-                        cell = board.cells[board.selected_row][board.selected_col]
-                        if cell.sketched_value != 0:
-                            board.place_number(cell.sketched_value)
-
-                        if board.is_full():
-                            print("You won!")
-                        else:
-                            print("Game over! Incorrect")
-
+                        if event.key == pygame.K_RETURN:
+                            cell = board.cells[board.selected_row][board.selected_col]
+                            if cell.sketched_value != 0:
+                                board.place_number(cell.sketched_value)
+                            try:
+                                if board.is_full():
+                                    statusMessage = 'You win!'
+                                else:
+                                    statusMessage = ''
+                            except Exception:
+                                statusMessage = ''
 
             screen.fill((255,255,255))
-            board.draw()
 
-            # Reset Button
-            reset_btn = pygame.Rect(50, 620, 150, 60)
-            pygame.draw.rect(screen, (150, 150, 150), reset_btn)
-            reset_text = button_font.render("Reset", True, (0, 0, 0))
-            screen.blit(reset_text, (reset_btn.x + 35, reset_btn.y + 15))
+            if gameState == 'menu':
 
-            # Restart Button
-            restart_btn = pygame.Rect(250, 620, 150, 60)
-            pygame.draw.rect(screen, (150, 150, 150), restart_btn)
-            restart_text = button_font.render("Restart", True, (0, 0, 0))
-            screen.blit(restart_text, (restart_btn.x + 25, restart_btn.y + 15))
+                title = buttonFont.render('Sudoku', True, (0,0,0))
+                screen.blit(title, (250, 120))
+                easyButton = pygame.Rect(200, 220, 200, 60)
+                pygame.draw.rect(screen, (200,200,200), easyButton)
+                easy_text = buttonFont.render('Easy', True, (0,0,0))
+                screen.blit(easy_text, (easyButton.x + 70, easyButton.y + 12))
+                mediumButton = pygame.Rect(200, 300, 200, 60)
+                pygame.draw.rect(screen, (200,200,200), mediumButton)
+                medium_text = buttonFont.render('Medium', True, (0,0,0))
+                screen.blit(medium_text, (mediumButton.x + 55, mediumButton.y + 12))
+                hardButton = pygame.Rect(200, 380, 200, 60)
+                pygame.draw.rect(screen, (200,200,200), hardButton)
+                hard_text = buttonFont.render('Hard', True, (0,0,0))
+                screen.blit(hard_text, (hardButton.x + 75, hardButton.y + 12))
 
-            # Exit Button
-            exit_btn = pygame.Rect(450, 620, 100, 60) # Smaller to fit
-            pygame.draw.rect(screen, (150, 150, 150), exit_btn)
-            exit_text = button_font.render("Exit", True, (0, 0, 0))
-            screen.blit(exit_text, (exit_btn.x + 20, exit_btn.y + 15))
+            elif gameState == 'gaming':
 
+                board.draw()
+                resetButton = pygame.Rect(20, 620, 120, 60)
+                pygame.draw.rect(screen, (150,150,150), resetButton)
+                reset_text = buttonFont.render('Reset', True, (0,0,0))
+                screen.blit(reset_text, (resetButton.x + 25, resetButton.y + 15))
+                restartButton = pygame.Rect(160, 620, 120, 60)
+                pygame.draw.rect(screen, (150,150,150), restartButton)
+                restart_text = buttonFont.render('Restart', True, (0,0,0))
+                screen.blit(restart_text, (restartButton.x + 15, restartButton.y + 15))
+                checkButton = pygame.Rect(300, 620, 120, 60)
+                pygame.draw.rect(screen, (150,150,150), checkButton)
+                check_text = buttonFont.render('Check', True, (0,0,0))
+                screen.blit(check_text, (checkButton.x + 25, checkButton.y + 15))
+                exitButton = pygame.Rect(440, 620, 120, 60)
+                pygame.draw.rect(screen, (150,150,150), exitButton)
+                exit_text = buttonFont.render('Exit', True, (0,0,0))
+                screen.blit(exit_text, (exitButton.x + 35, exitButton.y + 15))
+
+                try:
+                    if board.is_full():
+                        statusMessage = 'Sweet Victory!'
+                except Exception:
+                    pass
+                if statusMessage:
+                    msg = buttonFont.render(statusMessage, True, (0,150,0) if statusMessage == 'Sweet Victory!' else (150,0,0))
+                    screen.blit(msg, (220, 500))
             pygame.display.flip()
-
-
-        sudoku = SudokuGenerator(9, 50)
-        sudoku.fill_values()
-        board = sudoku.get_board()
-        sudoku.remove_cells()
-        board = sudoku.get_board()
-        sudoku.print_board()
 
 
 if __name__ == "__main__":
     main()
-    
-   
