@@ -104,6 +104,11 @@ class Board:
                 self.cells[self.selected_row][self.selected_col].set_cell_value(value)
                 self.my_Board[self.selected_row][self.selected_col] = value
 
+                if value == self.solution[self.selected_row][self.selected_col]:
+                    self.cells[self.selected_row][self.selected_col].color = (0, 155, 0)
+                else:
+                    self.cells[self.selected_row][self.selected_col].color = (200, 0, 0)
+
     def reset_to_original(self):
         for row in range(self.height):
             for col in range(self.width):

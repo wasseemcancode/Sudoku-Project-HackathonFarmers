@@ -12,6 +12,7 @@ class Cell:
         self.screen = screen
         self.sketched_value = 0
         self.selected = False
+        self.color = (0, 0, 0)
 
 
     def set_cell_value(self, value):
@@ -36,7 +37,7 @@ class Cell:
         # Draw the main number in solid black
         if self.value != 0:
             font = pygame.font.Font(None, 40)
-            text = font.render(str(self.value), True, (0,0,0))
+            text = font.render(str(self.value), True, self.color)
             text_rect = text.get_rect(center = rect.center)
             surface.blit(text, text_rect)
 
