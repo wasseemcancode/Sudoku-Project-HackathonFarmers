@@ -70,9 +70,12 @@ def main():
                         elif checkButton.collidepoint(x, y):
                             try:
                                 if board.is_full():
-                                    statusMessage = 'Sweet Victory!'
+                                    if board.check_board():
+                                        gameState = 'won'
+                                    else:
+                                        gameState = 'lost'
                                 else:
-                                    statusMessage = 'Defeat!'
+                                    statusMessage = 'Board not complete!'
                             except Exception:
                                 statusMessage = 'Error try again'
 
@@ -108,13 +111,22 @@ def main():
                             cell = board.cells[board.selected_row][board.selected_col]
                             if cell.sketched_value != 0:
                                 board.place_number(cell.sketched_value)
-                            try:
-                                if board.is_full():
-                                    statusMessage = 'You win!'
-                                else:
-                                    statusMessage = ''
-                            except Exception:
-                                statusMessage = ''
+
+                elif gameState == 'won':
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        x, y = event.pos
+                        exitButton = pygame.Rect(240, 400, 120, 60)
+                        if exitButton.collidepoint(x, y):
+                            pygame.quit()
+                            sys.exit()
+
+                elif gameState == 'lost':
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        x, y = event.pos
+                        restartButton = pygame.Rect(240, 400, 120, 60)
+                        if restartButton.collidepoint(x, y):
+                            gameState = 'menu'
+                            statusMessage = ''
 
             screen.fill((255,255,255))
 
@@ -155,14 +167,26 @@ def main():
                 exit_text = buttonFont.render('Exit', True, (0,0,0))
                 screen.blit(exit_text, (exitButton.x + 35, exitButton.y + 15))
 
-                try:
-                    if board.is_full():
-                        statusMessage = 'Sweet Victory!'
-                except Exception:
-                    pass
                 if statusMessage:
-                    msg = buttonFont.render(statusMessage, True, (0,150,0) if statusMessage == 'Sweet Victory!' else (150,0,0))
+                    msg = buttonFont.render(statusMessage, True, (0,150,0) if 'Victory' in statusMessage else (150,0,0))
                     screen.blit(msg, (220, 500))
+
+            elif gameState == 'won':
+                title = buttonFont.render('Game Won!', True, (0, 150, 0))
+                screen.blit(title, (230, 300))
+                exitButton = pygame.Rect(240, 400, 120, 60)
+                pygame.draw.rect(screen, (150,150,150), exitButton)
+                exit_text = buttonFont.render('Exit', True, (0,0,0))
+                screen.blit(exit_text, (exitButton.x + 35, exitButton.y + 15))
+
+            elif gameState == 'lost':
+                title = buttonFont.render('Game Over :(', True, (150, 0, 0))
+                screen.blit(title, (220, 300))
+                restartButton = pygame.Rect(240, 400, 120, 60)
+                pygame.draw.rect(screen, (150,150,150), restartButton)
+                restart_text = buttonFont.render('Restart', True, (0,0,0))
+                screen.blit(restart_text, (restartButton.x + 15, restartButton.y + 15))
+
             pygame.display.flip()
 
 
