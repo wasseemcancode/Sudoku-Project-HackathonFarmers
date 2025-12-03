@@ -72,6 +72,7 @@ class Board:
 
         button_font = pygame.font.SysFont(None, 36)"""
 
+    """
     def draw_button(text, x, y, w, h):
             rect = pygame.Rect(x, y, w, h)
             pygame.draw.rect(screen, (200, 200, 200), rect)
@@ -101,7 +102,7 @@ class Board:
 
     draw_button("Reset", 25, btn_y, btn_w, btn_h)
     draw_button("Restart", 225, btn_y, btn_w, btn_h)
-    draw_button("Exit", 425, btn_y, btn_w, btn_h)
+    draw_button("Exit", 425, btn_y, btn_w, btn_h)"""
 
     pygame.display.flip()
 
@@ -112,7 +113,7 @@ class Board:
         # Deselect all
         for i in range(self.height):
             for j in range(self.width):
-                self.cells[r][c].selected = False
+                self.cells[i][j].selected = False
 
         # Select a new spot
         self.cells[row][col].selected = True
@@ -138,7 +139,7 @@ class Board:
 
     def place_number(self, value):
         if self.selected_row is not None and self.selected_col is not None:
-            self.cells[self.selected_row][selected_col].set_cell_value(value)
+            self.cells[self.selected_row][self.selected_col].set_cell_value(value)
             self.my_Board[self.selected_row][self.selected_col] = value
 
     def reset_to_original(self):
