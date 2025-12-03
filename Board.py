@@ -115,6 +115,7 @@ class Board:
                 if self.original_board[row][col] == 0:
                     self.cells[row][col].set_cell_value(0)
                     self.cells[row][col].set_sketched_value(0)
+                    self.cells[row][col].color = (0,0,0) # Reset color to black
                     self.my_Board[row][col] = 0
         
     def is_full(self):
