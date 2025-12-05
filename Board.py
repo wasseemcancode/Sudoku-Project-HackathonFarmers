@@ -88,6 +88,8 @@ class Board:
         if self.selected_row is not None and self.selected_col is not None:
             if self.original_board[self.selected_row][self.selected_col] == 0:
                 self.cells[self.selected_row][self.selected_col].set_sketched_value(value)
+                self.cells[self.selected_row][self.selected_col].set_cell_value(0)
+                self.my_Board[self.selected_row][self.selected_col] = 0
 
     def place_number(self, value):
         if self.selected_row is not None and self.selected_col is not None:
@@ -97,6 +99,7 @@ class Board:
 
                 if value == self.solution[self.selected_row][self.selected_col]:
                     self.cells[self.selected_row][self.selected_col].color = (0, 155, 0)
+                    self.original_board[self.selected_row][self.selected_col] = value
                 else:
                     self.cells[self.selected_row][self.selected_col].color = (200, 0, 0)
 

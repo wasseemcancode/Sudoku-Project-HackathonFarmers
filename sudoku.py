@@ -16,6 +16,7 @@ def main():
         board = None
         gameState = 'menu'
         statusMessage = ''
+        messageTimer = 0
         gameRunning = True
 
         while gameRunning:
@@ -76,6 +77,7 @@ def main():
                                         gameState = 'lost'
                                 else:
                                     statusMessage = 'Board not complete!'
+                                    messageTimer = pygame.time.get_ticks()
                             except Exception:
                                 statusMessage = 'Error try again'
 
@@ -168,8 +170,24 @@ def main():
                 screen.blit(exit_text, (exitButton.x + 35, exitButton.y + 15))
 
                 if statusMessage:
-                    msg = buttonFont.render(statusMessage, True, (0,150,0) if 'Victory' in statusMessage else (150,0,0))
-                    screen.blit(msg, (220, 500))
+                    # Timer check: Only show if less than 3 seconds have passed
+                    if pygame.time.get_ticks() - messageTimer < 3000:
+                        
+                        # Render the text in RED (since it's an alert/error)
+                        msg = buttonFont.render(statusMessage, True, (150, 0, 0))
+                        
+                        # Create a background rectangle (optional, makes it easier to read over grid)
+                        # Remove these 3 lines if you just want text
+                        bg_rect = msg.get_rect(center=(300, 350))
+                        bg_rect.inflate_ip(20, 20) # Make it a bit bigger than text
+                        pygame.draw.rect(screen, (255, 255, 255), bg_rect) # White background
+
+                        # Center the text at (300, 350) - Middle of the screen
+                        msg_rect = msg.get_rect(center=(300, 350))
+                        screen.blit(msg, msg_rect)
+                        
+                    else:
+                        statusMessage = "" # Clear message after 3 seconds
 
             elif gameState == 'won':
                 title = buttonFont.render('Game Won!', True, (0, 150, 0))
